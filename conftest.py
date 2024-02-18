@@ -1,4 +1,7 @@
 import pytest
+import allure
+from datetime import datetime
+from allure_commons.types import AttachmentType
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.firefox.options import Options as OptionsFirefox
@@ -30,5 +33,7 @@ def browser(request):
         raise pytest.UsageError("--browser_name дложен быть chrome или firefox")
 
     yield browser
-    print(f"\n{browser_name} закрытие браузера...")
+    with allure.step("Делаем скриншот"):
+        allure.attach(browser.get_screenshot_as_png(), name=f'Screenshot_{datetime.today()}', attachment_type=AttachmentType.PNG)
+    print(f"\n закрытие браузера {browser_name}...")
     browser.quit()
